@@ -1,15 +1,206 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: rgb(80, 189, 225);
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            font-size: 2.5em;
+            color: white;
+            position: fixed;
+            top: 0;
+            z-index: 1;
+        }
+
+        main {
+            margin-top: 100px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 40px;
+            width: 350px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h1 {
+            color: rgb(80, 189, 225);
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            color: white;
+            background-color: rgb(80, 189, 225);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        button:hover {
+            background-color: rgb(80, 1, 255);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 10px;
+            background-color: rgb(80, 189, 225);
+            color: white;
+            position: static;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .or-divider {
+            margin: 20px 0;
+            color: #666;
+            position: relative;
+        }
+
+        .or-divider:before, .or-divider:after {
+            content: '';
+            display: block;
+            width: 40%;
+            height: 1px;
+            background-color: #ccc;
+            position: absolute;
+            top: 50%;
+        }
+
+        .or-divider:before {
+            left: 0;
+        }
+
+        .or-divider:after {
+            right: 0;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+        }
+
+        .social-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .signup-text a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .signup-text a:hover {
+            text-decoration: underline;
+        }
+
+        .output-Image{
+            margin: 1.35rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            header {
+                font-size: 2rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Welcome to Skin Disease Finding Web App!!!</h1>
-    <form action="">
-        Image Upload: <input type="file">
-        <button type="submit">Submit</button>
-    </form>
+    <header>
+        Skin Disease Finding Web App
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>Welcome!</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                Image Upload: <input type="file" name="uploadImage"><br>
+                <button type="submit">Submit</button>
+            </form>
+            <hr>
+            {% if img_url %}
+                <h2>Uploaded Image:</h2>
+                <img src="{{ img_url }}" alt="Uploaded Image" style="max-width: 100%; height: auto;">
+
+                <h2>Processed Image with Detected Area:</h2>
+                <img src="{{ processed_img_url }}" alt="Processed Image" style="max-width: 100%; height: auto;">
+            {% endif %}
+        </div> 
+        
+            <div class="output-Image">
+                {% if img %}
+                    <img src="{{img}}" alt="No Image loaded" height="300px" width="425px">
+                {% endif %}
+            </div>
+        
+            <div style="width: 500px;">
+                <p style="text-align: center; font-weight: bold; font-size: 24px;">Skin Disease Result: 
+                    {% if obj1 %}
+                        {{ obj1 }}
+                    {% endif %}
+                </p>
+            </div>
+    </main>
+
+    <footer>
+        &copy; 2024 Skin Disease Finder
+    </footer>
 </body>
 </html>
