@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <style>
+
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -17,20 +18,28 @@
             align-items: center;
             min-height: 100vh;
             flex-direction: column;
+
         }
+
 
         header {
-            background-color: rgb(80, 189, 225);
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            font-size: 2.5em;
-            color: white;
-            position: fixed;
-            top: 0;
-            z-index: 1;
+        background-color: rgb(80, 189, 225);
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+        font-size: 2.5em;
+        color: white;
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         }
 
+        header a.logout-button {
+            margin: 1rem;
+        }
         main {
             margin-top: 100px;
         }
@@ -159,11 +168,44 @@
             }
         }
 
+  
+
+         .logout-button {
+            width: auto;
+            position: absolute;
+            right: 1.5rem;
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+    .logout-button:hover {
+        background-color: #d32f2f;
+    }
+
+    .results{
+        border: 2px solid skyblue;
+        border-radius: 15px;
+        width: 420px;
+        margin: 20px;
+        padding: 5px;
+    }
+
     </style>
 </head>
 <body>
     <header>
-        Skin Disease Finding Web App
+        <div style="flex: 1; text-align: center;">Skin Disease Finding Web App</div>
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+        </form>
+        <button type="submit" class="logout-button">Logout</button>
     </header>
 
     <main>
@@ -190,20 +232,25 @@
                 {% endif %}
             </div>
         
-            <div style="width: 500px;">
-                <p style="text-align: center; font-weight: bold; font-size: 24px;">Skin Disease Result: 
-                    {% if obj1 %}
-                        {{ obj1 }}
-                    {% endif %}
-                </p>
+            <div class="results">
+                <div>
+                    <p style="text-align: center; font-weight: bold; font-size: 24px;">Skin Disease Result: 
+                        {% if obj1 %}
+                            {{ obj1 }}
+                        {% endif %}
+                    </p>
+                </div>
+    
+                <div>
+                    <p style="text-align: center; font-weight: bold; font-size: 24px;">Skin Disease Diagnosis:</p>
+                    <ul>
+                        {% for step in diagnostic_steps %}
+                            <li>{{ step }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-            <div style="width: 500px;">
-                <p style="text-align: center; font-weight: bold; font-size: 24px;">Skin Disease Diagnosis: 
-                    {% if obj1 %}
-                        {{ obj1 }}
-                    {% endif %}
-                </p>
-            </div>
+            
     </main>
 
     <footer>
