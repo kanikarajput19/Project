@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from django.contrib.auth import authenticate , login
 from django.contrib.auth import authenticate, login as auth_login
 from django.core.files.storage import FileSystemStorage
+from .diagnostic_data import DIAGNOSTIC_STEPS
 
 from joblib import load
 import cv2
@@ -241,10 +242,37 @@ def profile(request):
             # result2 = diagnosis[predict]
  
             # return render(request,'profile.html',{'img':img_url,'obj1':result1,'obj2':result2})
-            return render(request,'profile.html',{'img':img_url,'obj1':result1})
+            # return render(request,'profile.html',{'img':img_url,'obj1':result1})
+             # Retrieve diagnostic steps from the dictionary
+            diagnostic_steps = DIAGNOSTIC_STEPS.get(result1, ["No diagnostic steps available."])
+
+            # Pass disease name and diagnostic steps to the template
+            return render(request, 'profile.html', {
+                'img': img_url,
+                'obj1': result1,
+                'diagnostic_steps': diagnostic_steps
+            })
+
     else:
         return render(request,'profile.html')
 
+
+
+def diagnose_skin_disease(request):
+    if request.method == "POST":
+        uploaded_image = request.FILES['uploadImage']
+        # Process the uploaded image and get the disease prediction
+        predicted_disease = "FU-nail-fungus"  # Replace with your model's prediction logic
+        
+        # Fetch diagnostic steps for the predicted disease
+        diagnostic_steps = DIAGNOSTIC_STEPS.get(predicted_disease, ["No diagnostic steps available."])
+        
+        return render(request, 'diagnostic_page.html', {
+            'img_url': uploaded_image.url,
+            'diagnostic_steps': diagnostic_steps,
+        })
+
+    return render(request, 'upload_page.html')
 
 
 
